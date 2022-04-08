@@ -1,3 +1,5 @@
+import * as assert from "assert";
+
 export function majorityElement(numberList: Array<number>): number {
     type Pair = [number, number]
     const numberMap = numberList.reduce((previous, current) => {
@@ -12,3 +14,5 @@ export function majorityElement(numberList: Array<number>): number {
 
     return results.length > 0 ? results[0] : 0
 }
+
+assert.deepEqual(majorityElement([1, 2, 2]), 2)

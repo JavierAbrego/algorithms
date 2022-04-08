@@ -1,10 +1,11 @@
+import * as assert from "assert";
+
 export function rotationalCipher(input: string, rotationFactor: number): string {
-    let alphabetLowercase = "abcdefghijklmnopqrstuvwxyz"
-    let alphabetUppercase = alphabetLowercase.toUpperCase();
-    let numbers = "1234567890"
+    const alphabetLowercase = "abcdefghijklmnopqrstuvwxyz"
+    const alphabetUppercase = alphabetLowercase.toUpperCase();
+    const numbers = "1234567890"
     const alphabets = [alphabetLowercase, alphabetUppercase, numbers]
 
-    // Write your code here
     return input.split('').map(char => {
         const toUse = alphabets.reduce((acc: { readonly alphabet: string, readonly index: number }, alphabet) => {
             const index = alphabet.indexOf(char)
@@ -15,3 +16,6 @@ export function rotationalCipher(input: string, rotationFactor: number): string 
         return toUse.alphabet[indexToReplace - 1]
     }).join('');
 }
+
+assert.deepEqual(rotationalCipher("All-convoYs-9-be:Alert1.", 4), "Epp-gsrzsCw-3-fi:Epivx5.")
+assert.deepEqual(rotationalCipher("abcdZXYzxy-999.@", 200), "stuvRPQrpq-999.@")
