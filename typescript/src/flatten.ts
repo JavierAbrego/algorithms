@@ -1,4 +1,5 @@
 import * as assert from "assert";
+
 /**
  * Please complete this function which takes a deeply nested object, `source`, and returns
  * an object with dot - separated paths pointing to all primitive values from`source`.
@@ -17,21 +18,28 @@ import * as assert from "assert";
  *
  */
 
-const reduceOneLevelFromArray = (array) =>[].concat(...array)
-export function flatten (source) {
-    return Object.fromEntries(reduceOneLevelFromArray(Object.entries(source).map(flattenFromEntryFunction)))
-}
 
-function flattenFromEntryFunction([key, value]) {
-    if (Array.isArray(value)) {
-        return reduceOneLevelFromArray(value.map((item, index) => flattenFromEntryFunction([`${key}.${index}`, item])))
-    } else if (typeof value==='object' && value!==null){
-        return Object.entries(value).map(entry => reduceOneLevelFromArray(flattenFromEntryFunction([`${key}.${entry[0]}`, entry[1]])))
-    } else {
-        return [[key, value]]
+export function flatten(source: unknown) {
+    const result = {} as Record<string, unknown>
+
+    function recursiveFlatten(source: unknown, pathPrefix = '') {
+        enum TYPES  {
+            ARRAY='array',
+            OBJECT='object',
+            OTHER= 'other'
+        }
+        const actions = {
+            [TYPES.ARRAY]: () => (source as Array<unknown>).forEach((arrValue, index) => recursiveFlatten(arrValue, `${pathPrefix}.${index}`)),
+            [TYPES.OBJECT]: () => Object.entries(source as Record<string, unknown>).forEach(([key, value]) => recursiveFlatten(value, `${pathPrefix}${pathPrefix !== '' ? '.' : ''}${key}`)),
+            [TYPES.OTHER]: (): void => { result[pathPrefix] = source; }
+        }
+        const getType = ()=> Array.isArray(source) ? TYPES.ARRAY : (typeof source === 'object' && source !== null) ? TYPES.OBJECT : TYPES.OTHER
+        actions[getType()]()
     }
-}
 
+    recursiveFlatten(source)
+    return result
+}
 
 
 const source = {

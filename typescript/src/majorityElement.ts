@@ -15,4 +15,28 @@ export function majorityElement(numberList: Array<number>): number {
     return results.length > 0 ? results[0] : 0
 }
 
-assert.deepEqual(majorityElement([1, 2, 2]), 2)
+
+const  majorityElement2 = (arr: number[]) => {
+    const elements =new Map<number, number>()
+    for (let i = 0; i < arr.length; i++) {
+        const value = arr[i]
+        const elementValue = elements.get(value)
+        elements.set( value, elementValue ? (elementValue +1) : 1 )
+    }
+    const entries: [number, number][] = Array.from(elements.entries())
+    for (let i =0; i<entries.length; i++) {
+        const entry = entries[i]
+        if(entry[1]>(arr.length/2)){
+            return entry[0]
+        }
+    }
+    return 0
+}
+
+function test(fn: (arr: number[]) => number){
+    assert.deepEqual(fn([1, 2, 2]), 2)
+    assert.deepEqual(fn([2, 2, 2, 2, 5, 5, 2, 3, 3]), 2)
+}
+
+test(majorityElement)
+test(majorityElement2)
