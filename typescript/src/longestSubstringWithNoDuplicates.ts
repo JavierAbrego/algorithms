@@ -15,13 +15,13 @@ function lengthOfLongestSubstringBruteForce(source: string) {
 function lengthOfLongestSubstring(source: string) {
     let startNum = 0
     const map = new Map();
-    const numberExistAfterStartNum = (char: string)=> map.get(char) >= startNum
+    const charExistAfterStartNum = (char: string)=> map.get(char) >= startNum
     const currentLengthIsMoreThanPrevious = (i:number, maximumLen:number)=> i - startNum + 1 > maximumLen
     const setStartNumToPreviousCharPositionPlusOne = (char:string) => (startNum = map.get(char) + 1)
 
-    return  source.split('').reduce((maximumLen, char, i)=>{
+    return  Array.from(source).reduce((maximumLen, char, i)=>{
         const setMaximumLengthToCurrent = () => (maximumLen = i - startNum + 1)
-        numberExistAfterStartNum(char) && setStartNumToPreviousCharPositionPlusOne(char)
+        charExistAfterStartNum(char) && setStartNumToPreviousCharPositionPlusOne(char)
         currentLengthIsMoreThanPrevious(i, maximumLen) && setMaximumLengthToCurrent()
         map.set(char, i)
         return maximumLen
